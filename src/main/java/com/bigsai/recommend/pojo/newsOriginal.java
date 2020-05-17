@@ -2,7 +2,7 @@ package com.bigsai.recommend.pojo;
 
 import java.util.Date;
 
-public class news1 {
+public class newsOriginal {
     private  String id;
     private String title;
     private  String biref;
@@ -14,7 +14,7 @@ public class news1 {
 
 
 
-    public news1(String id, String title, String biref, String content, String htmlContent, String imgurl, String newUrl, Date newTime) {
+    public newsOriginal(String id, String title, String biref, String content, String htmlContent, String imgurl, String newUrl, Date newTime) {
         this.id = id;
         this.title = title;
         this.biref = biref;

@@ -1,11 +1,11 @@
-package com.bigsai.recommend.tf;
+package com.bigsai.recommend.service;
 
 
 import com.bigsai.recommend.dao.newsMapper;
 import com.bigsai.recommend.pojo.news;
-import com.bigsai.recommend.pojo.newsTopk;
-import com.bigsai.recommend.service.dataUtils;
-import com.bigsai.recommend.service.newsService;
+import com.bigsai.recommend.pojo.newsTopkWeight;
+import com.bigsai.recommend.tf.TFIDF;
+import com.bigsai.recommend.utils.DataChangeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class train {
-    private Logger log= LoggerFactory.getLogger(train.class);
+public class TrainService {
+    private Logger log= LoggerFactory.getLogger(TrainService.class);
     //全部数据重新计算
     @Autowired(required = false)
     private newsMapper newsMapper;
@@ -32,35 +32,32 @@ public class train {
     RedisTemplate redisTemplate;
 
     @Autowired(required = false)
-    private  topKword topKword;
+    private com.bigsai.recommend.tf.TopkWord topKword;
 
     //计算文章得TF-IDF值以json格式存入mysql
     public void trainContent() throws Exception {
         List<news>allnews=newsMapper.getnews();
-        for(int i=0;i<allnews.size();i++)
+        for(int i=0;i<allnews.size();i++)//插入、更新对应的topk 和 newsweight
         {
             news news1=allnews.get(i);
             String content=news1.getContent();
             List<Map.Entry<String,Double>>newstfidf=topKword.getTopk(content);
-            newsTopk newsTopk=new newsTopk(news1.getId());
-            newsTopk.setContentTfidf(newstfidf);
-            newsTopk.setTopk(dataUtils.mapToString(newstfidf));
-            try {
-                newsService.insertTopk(newsTopk);
+            newsTopkWeight newsTopkWeight =new newsTopkWeight(news1.getId());
+            newsTopkWeight.setContentTfidf(newstfidf);
+            newsTopkWeight.setTopk(DataChangeUtils.ListmapToString(newstfidf));
+            newsTopkWeight.setStar(0);
+            newsTopkWeight.setWeight(1.0);
+
+            try {//没有则插入，有则更新
+                newsService.insertorUpdateTopkWeight(newsTopkWeight);
             }
             catch (Exception e)
             {
+                e.printStackTrace();
                 log.info(e.toString());
             }
-            newsService.insertTopk(newsTopk);
 
 
-            System.out.print(news1.getTitle()+" ");
-            for(Map.Entry<String,Double>m:newstfidf)
-            {
-                System.out.print(m.getKey()+":"+m.getValue());
-            }
-            System.out.println();
         }
     }
 

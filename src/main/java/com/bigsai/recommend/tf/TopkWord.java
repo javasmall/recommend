@@ -5,8 +5,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ * 获取topK关键词和对应的TF-IDF,引用TFIDF类进行操作。
+ */
 @Component
-public class topKword {
+public class TopkWord {
+
     @Autowired(required = false)
     private  TFIDF TFIDF;
     public List<Map.Entry<String,Double>>getTopk(String content,int n) throws Exception {

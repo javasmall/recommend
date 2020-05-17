@@ -6,6 +6,8 @@ import org.ansj.app.keyword.Keyword;
 import org.ansj.domain.Result;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.ToAnalysis;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,7 @@ import java.util.*;
 
 @Component
 public class TFIDF {
+       private Logger log= LoggerFactory.getLogger(TFIDF.class);
     //只需要这些词性的词
       @Autowired(required = false)
       private newsMapper newsMapper;
@@ -32,9 +35,10 @@ public class TFIDF {
       {
           Map<String,Double>tfidf=getTf(content);
           //tf-idf=tf * idf
+
           for(String word:tfidf.keySet())
           {
-              tfidf.put(word,tfidf.get(word)*getIDF(word));
+              tfidf.put(word,tfidf.get(word)*(double)getIDF(word));
           }
           return  tfidf;
       }
@@ -74,9 +78,14 @@ public class TFIDF {
     //返回该单词的idf
     public Double getIDF(String word)
     {
-        allWordTimes=(Map<String, Integer>) redisTemplate.opsForValue().get("idf");
+       // log.info((allWordTimes==null)+" "+allWordTimes.toString());
+
         if(allWordTimes==null)
-            getAllWordTime();
+        {
+            allWordTimes=(Map<String, Integer>) redisTemplate.opsForValue().get("idf");
+            contentSize=(int)redisTemplate.opsForValue().get("contentSize");
+        }
+
         int count=1;
         if(allWordTimes.containsKey(word))
         count=allWordTimes.get(word)+1;
@@ -102,6 +111,7 @@ public class TFIDF {
         }
         //存到redis中
         redisTemplate.opsForValue().set("idf",allWordTimes);
+        redisTemplate.opsForValue().set("contentSize",contentSize);
 
     }
      //将文章所有单词添加到总的map中。计算该单词共出现的文章数量

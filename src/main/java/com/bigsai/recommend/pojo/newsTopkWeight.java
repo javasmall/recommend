@@ -3,22 +3,34 @@ package com.bigsai.recommend.pojo;
 import java.util.List;
 import java.util.Map;
 
-public class newsTopk {
+public class newsTopkWeight {
     private int id;
     private String newsId;
     private List<Map.Entry<String,Double>> contentTfidf;
     private String topk;
+    private double weight;
+    private int star;
+
+    public newsTopkWeight(int id, String newsId, String topk, double weight, int star) {
+        this.id = id;
+        this.newsId = newsId;
+        this.topk = topk;
+        this.weight = weight;
+        this.star = star;
+    }
 
 
-    public newsTopk(String newsId){
+
+
+    public newsTopkWeight(String newsId){
         this.newsId=newsId;
     }
-    public newsTopk(int id, String newsId,  String topk) {
+    public newsTopkWeight(int id, String newsId, String topk) {
         this.id = id;
         this.newsId = newsId;
         this.topk = topk;
     }
-    public newsTopk(int id, String newsId, List<Map.Entry<String, Double>> contentTfidf, String topk) {
+    public newsTopkWeight(int id, String newsId, List<Map.Entry<String, Double>> contentTfidf, String topk) {
         this.id = id;
         this.newsId = newsId;
         this.contentTfidf = contentTfidf;
@@ -27,7 +39,7 @@ public class newsTopk {
 
     @Override
     public String toString() {
-        return "newsTopk{" +
+        return "newsTopkWeight{" +
                 "id='" + id + '\'' +
                 ", newsId='" + newsId + '\'' +
                 ", contentTfidf=" + contentTfidf +
@@ -66,5 +78,21 @@ public class newsTopk {
 
     public void setTopk(String topk) {
         this.topk = topk;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public int getStar() {
+        return star;
+    }
+
+    public void setStar(int star) {
+        this.star = star;
     }
 }

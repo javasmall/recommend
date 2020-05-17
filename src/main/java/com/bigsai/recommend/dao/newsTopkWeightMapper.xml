@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bigsai.recommend.dao.newsTopkWeightMapper" >
+
+    <update id="updateWeightByNewsId" parameterType="java.util.Map">
+        update news_topk_weight
+        set weight = case news_id
+        <foreach collection="map.entrySet()" index="key" item="value">
+            when #{key} then #{value}
+        </foreach>
+        end
+<!--        where news_id in-->
+<!--        <foreach collection="map.entrySet()" index="key" separator="," open="(" close=")">-->
+<!--            #{key}-->
+<!--        </foreach>-->
+    </update>
+
+</mapper>

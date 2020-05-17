@@ -1,14 +1,13 @@
 package com.bigsai.recommend;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.bigsai.recommend.dao.newsMapper;
+import com.bigsai.recommend.dao.userMapper;
 import com.bigsai.recommend.pojo.news;
-import com.bigsai.recommend.pojo.newsTopk;
+import com.bigsai.recommend.pojo.users;
+import com.bigsai.recommend.service.dailyUpdateService;
 import com.bigsai.recommend.service.newsService;
+import com.bigsai.recommend.service.userService;
 import com.bigsai.recommend.tf.TFIDF;
-import com.bigsai.recommend.tf.train;
 import org.ansj.app.keyword.KeyWordComputer;
 import org.ansj.app.keyword.Keyword;
 import org.junit.jupiter.api.Test;
@@ -96,7 +95,7 @@ class RecommendApplicationTests {
     }
 
     @Autowired(required = false)
-    private com.bigsai.recommend.tf.topKword topKword;
+    private com.bigsai.recommend.tf.TopkWord topKword;
     @Test
     public void test3() throws Exception {
         String content="被誉为“病毒猎手”的美国传染病学专家伊恩·利普金（Ian Lipkin）教授日前在接受采访时表示，新冠病毒可能已经在人类中传播了几个月甚至数年时间。\n" +
@@ -113,16 +112,20 @@ class RecommendApplicationTests {
 
     }
     @Autowired(required = false)
-    com.bigsai.recommend.tf.train train;
+    com.bigsai.recommend.service.TrainService train;
     @Autowired(required = false)
     private newsService newsService;
 
     @Autowired(required = false)
     RedisTemplate redisTemplate;
+
     @Test
     public void test4() throws Exception {
-       train.trainAllwordTimes();
-//        newsTopk newstopk=new newsTopk("55");
+        Map<String ,Integer>allWordTimes=(Map<String, Integer>) redisTemplate.opsForValue().get("idf");
+        log.info(allWordTimes.toString());
+//        train.trainContent();
+
+//        newsTopkWeight newstopk=new newsTopkWeight("55");
 //
 //        newstopk.setNewsId("55");
 //
@@ -146,5 +149,47 @@ class RecommendApplicationTests {
 //       newsService.insertTopk(newstopk);
 
 
+    }
+    @Test
+    public void test5() throws Exception {
+        String content="被誉为“病毒猎手”的美国传染病学专家伊恩·利普金（Ian Lipkin）教授日前在接受采访时表示，新冠病毒可能已经在人类中传播了几个月甚至数年时间。\n" +
+                "　　据美国有线电视新闻网（CNN）4月4日报道，美国哥伦比亚大学公共卫生学院感染与免疫中心主任利普金表示，新冠病毒可能不仅是过去几个月中来自蝙蝠，而是有可能数月甚至数年前就进入了人类体内，最终转变为“人传人”的致命病毒。\n" +
+                "　　“我认为它可能在人类中传播了一段时间。”利普金说：“多久？ 我们可能永远不会完全重建这一过程……它可能已经流传了几个月甚至几年时间。”\n" +
+                "　　科学杂志《自然医学》近日（3月17日）也发布最新研究称，新冠病毒为自然产物，不可能是在实验室中构建的，且新冠病毒之前或以相对弱化的形式在人群中传播，甚至可能已存在多年。病毒在发生突变后，才触发大流行。\n" +
+                "　　3月24日，利普金在接受美国福克斯商业频道采访时确认，自己新冠病毒检测呈阳性。今年1月新冠疫情暴发之初，利普金曾以个人名义到中国考察疫情防控情况。";
+
+        newsService.recommendBynewsId("ARTI05wNQi5kNrYZPeWRX0xo200424");
+        //train.trainContent();
+        System.out.println(Math.log(Math.E)+" "+Math.log(5)+" "+Math.log(10)+" "+Math.log(20)+" "+Math.log(100)+" "+Math.log(1000));
+    }
+
+    @Autowired(required = false)
+    com.bigsai.recommend.service.dailyUpdateService dailyUpdateService;
+    @Test
+    public  void  test6()
+    {
+        dailyUpdateService.userPreferDecline();
+    }
+    @Autowired(required = false)
+    userMapper userMapper;
+    @Autowired(required =false)
+    userService userService;
+    @Test
+    public  void test7()
+    {
+        userService.readAriticle("ARTILiq5zEcUCxtJfMpwqpIt200422","bigsai");
+    }
+
+
+    @Test
+    public  void test8()
+    {
+        dailyUpdateService.userPreferDecline();
+    }
+
+    @Test
+    public void test9()
+    {
+        newsService.recommendByusername("bigsai");
     }
 }
