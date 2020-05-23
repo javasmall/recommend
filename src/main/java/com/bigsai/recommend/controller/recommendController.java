@@ -1,7 +1,7 @@
 package com.bigsai.recommend.controller;
 
 import com.bigsai.recommend.pojo.recommendPojo;
-import com.bigsai.recommend.service.newsService;
+import com.bigsai.recommend.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +13,7 @@ import java.util.List;
 public class recommendController {
 
     @Autowired(required = false)
-    newsService newsService;
+    NewsService newsService;
 
     @GetMapping("recommend/user/{username}")
     public List<recommendPojo> recommendByusername(@PathVariable("username")  String username)

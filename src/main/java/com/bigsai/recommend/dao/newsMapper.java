@@ -16,7 +16,7 @@ public interface newsMapper {
     @Select("select * from news")
     public  List<news>getnews();
 
-    @Select("select * from  news1")
+    @Select("select * from  newsOriginal")
     List<newsOriginal>getOriginalNew();
 
 

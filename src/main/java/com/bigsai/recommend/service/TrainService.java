@@ -26,7 +26,7 @@ public class TrainService {
     private TFIDF tfidf;
 
     @Autowired(required = false)
-    private newsService newsService;
+    private NewsService newsService;
 
     @Autowired(required = false)
     RedisTemplate redisTemplate;

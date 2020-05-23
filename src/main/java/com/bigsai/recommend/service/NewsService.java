@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class newsService {
-    private Logger log = LoggerFactory.getLogger(newsService.class);
+public class NewsService {
+    private Logger log = LoggerFactory.getLogger(NewsService.class);
     @Autowired(required = false)
     private newsMapper newsMapper;
     @Autowired(required = false)

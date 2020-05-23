@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ public class dailyUpdateService {
     newsTopkWeightMapper newsTopkWeightMapper;
     @Autowired(required = false)
     userMapper userMapper;
-
 
     /**
      * 每日对新闻weight进行衰减，衰减频率为0.7每日。2日为0.49

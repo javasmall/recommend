@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class userService {
+public class UserService {
 
     @Autowired(required = false)
     newsTopkWeightMapper newsTopkWeightMapper;
